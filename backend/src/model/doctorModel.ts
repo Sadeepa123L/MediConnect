@@ -60,3 +60,4 @@ const DoctorSchema = new Schema<IDoctor>(
   },
   { timestamps: true },
 );
+export default mongoose.model<IDoctor>("Doctor", DoctorSchema);
