@@ -1,9 +1,9 @@
-import  express  from "express";
-import dotenv from "dotenv"
-import cors from "cors"
+import express from "express";
+import dotenv from "dotenv";
+import cors from "cors";
 import { connectDB } from "./config/db";
-import authRoutes from './routes/authRoutes'
-
+import authRoutes from "./routes/authRoutes";
+import doctorRoutes from "./routes/doctorRoutes";
 
 dotenv.config();
 
@@ -15,10 +15,11 @@ app.use(express.json());
 connectDB();
 
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/doctor", doctorRoutes);
 
 app.get("/", (req, res) => {
   res.json({
-    message: "Doctor Appointment Backend Running"
+    message: "Doctor Appointment Backend Running",
   });
 });
 
