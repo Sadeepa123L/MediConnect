@@ -40,3 +40,21 @@ export const saveDoctor = async (
     });
   }
 };
+
+export const getAllDoctors = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  try {
+    const doctors = await Doctor.find();
+    res.status(200).json({
+      message: "Doctors retrieved successfully",
+      data: doctors,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error retrieving items",
+      error: error,
+    });
+  }
+};
