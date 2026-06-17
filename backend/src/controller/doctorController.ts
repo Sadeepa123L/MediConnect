@@ -37,6 +37,7 @@ export const saveDoctor = async (
   } catch (error) {
     res.status(500).json({
       message: "Server error",
+      error: error,
     });
   }
 };
@@ -54,6 +55,72 @@ export const getAllDoctors = async (
   } catch (error) {
     res.status(500).json({
       message: "Error retrieving items",
+      error: error,
+    });
+  }
+};
+
+export const getDoctorById = async (req: Request, res: Response) => {
+  try {
+    const doctor = await Doctor.findById(req.params.id);
+    if (!doctor) {
+      return res.status(404).json({
+        message: "Doctor not found",
+      });
+    }
+    res.status(200).json(doctor);
+  } catch (error) {
+    res.status(500).json({
+      message: "Error retrieving doctor",
+      error: error,
+    });
+  }
+};
+
+export const updateDoctor = async (req: Request, res: Response) => {
+  try {
+    const updateDoctor = await Doctor.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true },
+    );
+    if (!updateDoctor) {
+      return res.status(400).json({
+        success: false,
+        message: "Doctor not found",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "Doctor update successfully",
+      data: updateDoctor,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Error updating doctor",
+      error: error,
+    });
+  }
+};
+
+export const deleteDoctor = async (req: Request, res: Response) => {
+  try {
+    const doctor = await Doctor.findByIdAndDelete(req.params.id);
+    if (!doctor) {
+      return res.status(404).json({
+        message: "doctor not found",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "Doctor delete successfully",
+      data: doctor,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Error deleting doctor",
       error: error,
     });
   }
