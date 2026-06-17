@@ -7,23 +7,30 @@ import Doctors from '../pages/Doctors';
 import Appointments from '../pages/Appointments';
 import Profile from '../pages/Profile';
 import LoginPage from '../pages/loginPage';
+import BookingPage from '../pages/BookingPage';
+
+import LandingPage from '../pages/LandingPage';
 
 export default function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/book" element={<BookingPage />} />
         <Route path="/login" element={<LoginPage />} />
 
         <Route path="/dashboard" element={
-          <ProtectedRoutes><DashboardLayout/>
-          </ProtectedRoutes>}>
+          <ProtectedRoutes>
+            <DashboardLayout />
+          </ProtectedRoutes>
+        }>
           <Route index element={<Overview />} />
           <Route path="doctors" element={<Doctors />} />
           <Route path="appointments" element={<Appointments />} />
           <Route path="profile" element={<Profile />} />
         </Route>
         
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );
