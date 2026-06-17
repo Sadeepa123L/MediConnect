@@ -4,6 +4,7 @@ import cors from "cors";
 import { connectDB } from "./config/db";
 import authRoutes from "./routes/authRoutes";
 import doctorRoutes from "./routes/doctorRoutes";
+import appointmentRoutes from "./routes/appointmentRoutes";
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ connectDB();
 
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/doctor", doctorRoutes);
+app.use("/api/v1/appointments", appointmentRoutes);
 
 app.get("/", (req, res) => {
   res.json({
