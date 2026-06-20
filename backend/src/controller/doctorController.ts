@@ -49,11 +49,14 @@ export const getAllDoctors = async (
   try {
     const doctors = await Doctor.find();
     res.status(200).json({
+      success: true,
+      count: doctors.length,
       message: "Doctors retrieved successfully",
       data: doctors,
     });
   } catch (error) {
     res.status(500).json({
+      success: false,
       message: "Error retrieving items",
       error: error,
     });
