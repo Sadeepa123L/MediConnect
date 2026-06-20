@@ -1,10 +1,13 @@
 import mongoose, { Document, Schema } from "mongoose";
 
-export enum AppointmentStatus {
-  PENDING = "Pending",
-  CONFIRMED = "Confirmed",
-  CANCELLED = "Cancelled",
-}
+export const AppointmentStatus = {
+  PENDING: "Pending",
+  CONFIRMED: "Confirmed",
+  CANCELLED: "Cancelled",
+} as const;
+
+export type AppointmentStatus =
+  (typeof AppointmentStatus)[keyof typeof AppointmentStatus];
 
 export interface IAppointment extends Document {
   appointmentNumber: string;
