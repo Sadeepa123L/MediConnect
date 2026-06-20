@@ -1,29 +1,22 @@
-import axios from "axios";
-
-const API_URL = "http://localhost:5000/api/v1/auth";
+import axiosInstance from "./axiosService";
 
 export const Login = async (email: string, password: string) => {
-    const response = await axios.post(`${API_URL}/login`,{
-        email,
-        password,
-    });
-    return response.data;
-}
+  const response = await axiosInstance.post("/auth/login", {
+    email,
+    password,
+  });
+  return response.data;
+};
 
 export const Register = async (
-    name: string,
-    email: string,
-    password: string
+  name: string,
+  email: string,
+  password: string,
 ) => {
-    const token = localStorage.getItem("token");
-    const response = await axios.post(`${API_URL}/register`,{
-        name,
-        email,
-        password
-    },{
-        headers: {
-            Authorization: `Bearer ${token}`,
-        },
-    });
-    return response.data;
-}
+  const response = await axiosInstance.post("/auth/register", {
+    name,
+    email,
+    password,
+  });
+  return response.data;
+};
