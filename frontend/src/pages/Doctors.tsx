@@ -7,8 +7,6 @@ import {
 } from "../services/doctorService";
 import type { Doctor, DoctorFormData } from "../types/doctor";
 
-// What the form needs to track — same as DoctorFormData but
-// availableDays as a comma string for easier typing in one input
 const emptyForm: DoctorFormData = {
   name: "",
   specialty: "",
@@ -25,7 +23,6 @@ export default function Doctors() {
   const [editingDoctor, setEditingDoctor] = useState<Doctor | null>(null);
   const [formData, setFormData] = useState<DoctorFormData>(emptyForm);
 
-  // ── Fetch doctors when page loads ──
   useEffect(() => {
     fetchDoctors();
   }, []);
@@ -42,14 +39,12 @@ export default function Doctors() {
     }
   };
 
-  // ── Open modal for ADD ──
   const handleOpenAdd = () => {
     setEditingDoctor(null);
     setFormData(emptyForm);
     setIsModalOpen(true);
   };
 
-  // ── Open modal for EDIT (pre-fill form) ──
   const handleOpenEdit = (doctor: Doctor) => {
     setEditingDoctor(doctor);
     setFormData({
@@ -63,7 +58,6 @@ export default function Doctors() {
     setIsModalOpen(true);
   };
 
-  // ── Handle text/number input changes ──
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -74,7 +68,6 @@ export default function Doctors() {
     }));
   };
 
-  // ── Handle availableDays (checkboxes) ──
   const handleDayToggle = (day: string) => {
     setFormData((prev) => {
       const alreadySelected = prev.availableDays.includes(day);
@@ -87,7 +80,6 @@ export default function Doctors() {
     });
   };
 
-  // ── Handle start/end time changes ──
   const handleTimeChange = (
     field: "start" | "end",
     value: string
@@ -98,25 +90,20 @@ export default function Doctors() {
     }));
   };
 
-  // ── Save (create or update depending on mode) ──
   const handleSave = async () => {
     try {
       if (editingDoctor) {
-        console.log("Updating doctor with ID:", editingDoctor._id);
-        // UPDATE mode
         await updateDoctor(editingDoctor._id, formData);
       } else {
-        // CREATE mode
         await createDoctor(formData);
       }
       setIsModalOpen(false);
-      fetchDoctors(); // refresh table after save
+      fetchDoctors();
     } catch (error) {
       console.error("Failed to save doctor:", error);
     }
   };
 
-  // ── Delete doctor ──
   const handleDelete = async (id: string) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this doctor?"
@@ -125,7 +112,7 @@ export default function Doctors() {
 
     try {
       await deleteDoctor(id);
-      fetchDoctors(); // refresh table after delete
+      fetchDoctors();
     } catch (error) {
       console.error("Failed to delete doctor:", error);
     }
@@ -143,19 +130,19 @@ export default function Doctors() {
 
   return (
     <div className="animate-fadeIn">
-      <div className="bg-white border border-gray-200 rounded-xl p-5 mb-5">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-[15px] font-medium text-gray-900">All doctors</h3>
+      <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-5 mb-5">
+        <div className="flex items-center justify-between mb-4 gap-2">
+          <h3 className="text-sm sm:text-[15px] font-medium text-gray-900">All doctors</h3>
           <button
             onClick={handleOpenAdd}
-            className="inline-flex items-center gap-1.5 bg-[#185FA5] text-white rounded-md px-3.5 py-1.5 text-[13px] font-sans hover:bg-[#0C447C] transition-all"
+            className="inline-flex items-center gap-1.5 bg-[#185FA5] text-white rounded-md px-3 sm:px-3.5 py-1.5 text-xs sm:text-[13px] font-sans hover:bg-[#0C447C] transition-all shrink-0"
           >
-            <i className="ti ti-plus" aria-hidden="true"></i> Add doctor
+            <i className="ti ti-plus" aria-hidden="true"></i> <span className="hidden sm:inline">Add doctor</span><span className="sm:hidden">Add</span>
           </button>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse text-[13px]">
+        <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
+          <table className="w-full border-collapse text-[13px] min-w-190">
             <thead>
               <tr>
                 <th className="text-left p-2 px-3 text-xs font-medium text-gray-500 border-b border-gray-200">Name</th>
@@ -183,14 +170,14 @@ export default function Doctors() {
               ) : (
                 doctors.map((doc) => (
                   <tr key={doc._id} className="hover:bg-gray-50/70">
-                    <td className="p-2.5 px-3 border-b border-gray-100 text-gray-900">
+                    <td className="p-2.5 px-3 border-b border-gray-100 text-gray-900 whitespace-nowrap">
                       <strong>{doc.name}</strong>
                     </td>
-                    <td className="p-2.5 px-3 border-b border-gray-100 text-gray-950">{doc.specialty}</td>
-                    <td className="p-2.5 px-3 border-b border-gray-100 text-gray-950">{doc.phone}</td>
-                    <td className="p-2.5 px-3 border-b border-gray-100 text-gray-950">{doc.consultationFee.toLocaleString()}</td>
-                    <td className="p-2.5 px-3 border-b border-gray-100 text-gray-950">{doc.availableDays.join(", ")}</td>
-                    <td className="p-2.5 px-3 border-b border-gray-100">
+                    <td className="p-2.5 px-3 border-b border-gray-100 text-gray-950 whitespace-nowrap">{doc.specialty}</td>
+                    <td className="p-2.5 px-3 border-b border-gray-100 text-gray-950 whitespace-nowrap">{doc.phone}</td>
+                    <td className="p-2.5 px-3 border-b border-gray-100 text-gray-950 whitespace-nowrap">{doc.consultationFee.toLocaleString()}</td>
+                    <td className="p-2.5 px-3 border-b border-gray-100 text-gray-950 whitespace-nowrap">{doc.availableDays.join(", ")}</td>
+                    <td className="p-2.5 px-3 border-b border-gray-100 whitespace-nowrap">
                       <span
                         className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-medium ${
                           doc.isActive
@@ -201,7 +188,7 @@ export default function Doctors() {
                         {doc.isActive ? "Active" : "Inactive"}
                       </span>
                     </td>
-                    <td className="p-2.5 px-3 border-b border-gray-100">
+                    <td className="p-2.5 px-3 border-b border-gray-100 whitespace-nowrap">
                       <div className="flex gap-1.5">
                         <button
                           onClick={() => handleOpenEdit(doc)}
@@ -226,8 +213,8 @@ export default function Doctors() {
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 animate-fadeIn">
-          <div className="bg-white rounded-xl border border-gray-200 p-6 w-120 max-w-[90%] shadow-xl">
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 animate-fadeIn p-4">
+          <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 w-full sm:w-120 max-w-full sm:max-w-[90%] shadow-xl max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-[15px] font-medium text-gray-900">
                 {editingDoctor ? "Edit doctor" : "Add doctor"}
@@ -237,7 +224,7 @@ export default function Doctors() {
               </button>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1">
                 <label className="text-xs font-medium text-gray-500">Full name</label>
                 <input
@@ -302,7 +289,6 @@ export default function Doctors() {
               </div>
             </div>
 
-            {/* Available Days — checkboxes */}
             <div className="mt-4">
               <label className="text-xs font-medium text-gray-500 block mb-2">Available days</label>
               <div className="flex flex-wrap gap-2">
@@ -323,16 +309,16 @@ export default function Doctors() {
               </div>
             </div>
 
-            <div className="flex justify-end gap-2 mt-5">
+            <div className="flex flex-col sm:flex-row justify-end gap-2 mt-5">
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="border border-gray-200 text-gray-500 px-4 py-1.5 rounded-md text-sm hover:bg-gray-50"
+                className="border border-gray-200 text-gray-500 px-4 py-1.5 rounded-md text-sm hover:bg-gray-50 order-2 sm:order-1"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSave}
-                className="bg-[#185FA5] text-white px-4 py-1.5 rounded-md text-sm hover:bg-[#0C447C] flex items-center gap-1"
+                className="bg-[#185FA5] text-white px-4 py-1.5 rounded-md text-sm hover:bg-[#0C447C] flex items-center justify-center gap-1 order-1 sm:order-2"
               >
                 <i className="ti ti-device-floppy" aria-hidden="true"></i> Save doctor
               </button>

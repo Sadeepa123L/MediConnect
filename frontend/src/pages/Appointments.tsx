@@ -62,10 +62,10 @@ export default function Appointments() {
   };
 
   return (
-    <div className="animate-fadeIn p-2 sm:p-4 md:p-6 lg:p-8 max-w-400 mx-auto w-full">
-      <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-5 md:p-6 mb-4 sm:mb-5 shadow-sm">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 sm:mb-5 md:mb-6">
-          <h3 className="text-base sm:text-[15px] md:text-lg font-medium text-gray-900">
+    <div className="animate-fadeIn w-full">
+      <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-5 mb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 sm:mb-5">
+          <h3 className="text-sm sm:text-[15px] font-medium text-gray-900">
             All appointments
           </h3>
           <select
@@ -80,102 +80,100 @@ export default function Appointments() {
           </select>
         </div>
 
-        <div className="overflow-x-auto -mx-4 sm:mx-0">
-          <div className="inline-block min-w-full align-middle px-4 sm:px-0">
-            <table className="min-w-full border-collapse text-xs sm:text-[13px] whitespace-nowrap">
-              <thead>
+        <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
+          <table className="w-full border-collapse text-[13px] min-w-190">
+            <thead>
+              <tr>
+                <th className="text-left p-2 px-3 text-xs font-medium text-gray-500 border-b border-gray-200">
+                  Patient
+                </th>
+                <th className="text-left p-2 px-3 text-xs font-medium text-gray-500 border-b border-gray-200">
+                  Doctor
+                </th>
+                <th className="text-left p-2 px-3 text-xs font-medium text-gray-500 border-b border-gray-200">
+                  Date & time
+                </th>
+                <th className="text-left p-2 px-3 text-xs font-medium text-gray-500 border-b border-gray-200">
+                  Status
+                </th>
+                <th className="text-left p-2 px-3 text-xs font-medium text-gray-500 border-b border-gray-200">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
                 <tr>
-                  <th className="text-left p-3 sm:p-2.5 sm:px-3 text-xs sm:text-sm font-medium text-gray-500 border-b border-gray-200">
-                    Patient
-                  </th>
-                  <th className="text-left p-3 sm:p-2.5 sm:px-3 text-xs sm:text-sm font-medium text-gray-500 border-b border-gray-200">
-                    Doctor
-                  </th>
-                  <th className="text-left p-3 sm:p-2.5 sm:px-3 text-xs sm:text-sm font-medium text-gray-500 border-b border-gray-200">
-                    Date & time
-                  </th>
-                  <th className="text-left p-3 sm:p-2.5 sm:px-3 text-xs sm:text-sm font-medium text-gray-500 border-b border-gray-200">
-                    Status
-                  </th>
-                  <th className="text-left p-3 sm:p-2.5 sm:px-3 text-xs sm:text-sm font-medium text-gray-500 border-b border-gray-200">
-                    Actions
-                  </th>
+                  <td colSpan={5} className="text-center p-6 text-sm text-gray-400">
+                    Loading appointments...
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {loading ? (
-                  <tr>
-                    <td colSpan={5} className="text-center p-6 sm:p-8 text-sm text-gray-400">
-                      Loading appointments...
+              ) : filteredAppointments.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="text-center p-6 text-sm text-gray-400">
+                    No appointments found
+                  </td>
+                </tr>
+              ) : (
+                filteredAppointments.map((appt) => (
+                  <tr key={appt._id} className="hover:bg-gray-50/70 transition-colors">
+                    <td className="p-2.5 px-3 border-b border-gray-100 text-gray-900 whitespace-nowrap">
+                      {appt.patientName}
                     </td>
-                  </tr>
-                ) : filteredAppointments.length === 0 ? (
-                  <tr>
-                    <td colSpan={5} className="text-center p-6 sm:p-8 text-sm text-gray-400">
-                      No appointments found
+                    <td className="p-2.5 px-3 border-b border-gray-100 text-gray-900 whitespace-nowrap">
+                      {appt.doctorName}
                     </td>
-                  </tr>
-                ) : (
-                  filteredAppointments.map((appt) => (
-                    <tr key={appt._id} className="hover:bg-gray-50/70 transition-colors">
-                      <td className="p-3 sm:p-2.5 sm:px-3 border-b border-gray-100 text-gray-900 font-medium sm:font-normal">
-                        {appt.patientName}
-                      </td>
-                      <td className="p-3 sm:p-2.5 sm:px-3 border-b border-gray-100 text-gray-900">
-                        {appt.doctorName}
-                      </td>
-                      <td className="p-3 sm:p-2.5 sm:px-3 border-b border-gray-100 text-gray-950">
-                        {appt.date} <span className="text-gray-400 mx-1">—</span> {appt.timeSlot}
-                      </td>
-                      <td className="p-3 sm:p-2.5 sm:px-3 border-b border-gray-100">
-                        <span
-                          className={`inline-block px-2.5 py-1 sm:py-0.5 rounded-full text-[11px] sm:text-xs font-medium ${statusStyles[appt.status]}`}
-                        >
-                          {appt.status}
-                        </span>
-                      </td>
-                      <td className="p-3 sm:p-2.5 sm:px-3 border-b border-gray-100">
-                        <div className="flex items-center gap-1.5 sm:gap-2">
-                          {appt.status === "Pending" && (
-                            <>
-                              <button
-                                onClick={() => handleUpdateStatus(appt._id, "Confirmed")}
-                                className="border border-gray-200 rounded-md px-3 py-1.5 sm:px-2.5 sm:py-1 text-xs text-gray-600 hover:bg-white hover:shadow-sm hover:border-gray-300 transition-all flex items-center gap-1.5 sm:gap-1"
-                              >
-                                <i className="ti ti-check" aria-hidden="true"></i> Confirm
-                              </button>
-                              <button
-                                onClick={() => handleUpdateStatus(appt._id, "Cancelled")}
-                                className="border border-red-200 rounded-md px-3 py-1.5 sm:px-2.5 sm:py-1 text-xs text-red-600 hover:bg-red-50 hover:border-red-300 transition-all flex items-center gap-1.5 sm:gap-1"
-                              >
-                                <i className="ti ti-x" aria-hidden="true"></i> Cancel
-                              </button>
-                            </>
-                          )}
-                          {appt.status === "Confirmed" && (
+                    <td className="p-2.5 px-3 border-b border-gray-100 text-gray-950 whitespace-nowrap">
+                      {appt.date} <span className="text-gray-400 mx-1">—</span> {appt.timeSlot}
+                    </td>
+                    <td className="p-2.5 px-3 border-b border-gray-100 whitespace-nowrap">
+                      <span
+                        className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-medium ${statusStyles[appt.status]}`}
+                      >
+                        {appt.status}
+                      </span>
+                    </td>
+                    <td className="p-2.5 px-3 border-b border-gray-100 whitespace-nowrap">
+                      <div className="flex items-center gap-1.5">
+                        {appt.status === "Pending" && (
+                          <>
+                            <button
+                              onClick={() => handleUpdateStatus(appt._id, "Confirmed")}
+                              className="border border-gray-200 rounded-md px-2.5 py-1 text-xs text-gray-600 hover:bg-white hover:shadow-sm hover:border-gray-300 transition-all flex items-center gap-1"
+                            >
+                              <i className="ti ti-check" aria-hidden="true"></i> Confirm
+                            </button>
                             <button
                               onClick={() => handleUpdateStatus(appt._id, "Cancelled")}
-                              className="border border-red-200 rounded-md px-3 py-1.5 sm:px-2.5 sm:py-1 text-xs text-red-600 hover:bg-red-50 hover:border-red-300 transition-all flex items-center gap-1.5 sm:gap-1"
+                              className="border border-red-200 rounded-md px-2.5 py-1 text-xs text-red-600 hover:bg-red-50 hover:border-red-300 transition-all flex items-center gap-1"
                             >
                               <i className="ti ti-x" aria-hidden="true"></i> Cancel
                             </button>
-                          )}
-                          {appt.status === "Cancelled" && (
-                            <button
-                              onClick={() => handleDelete(appt._id)}
-                              className="border border-red-200 rounded-md px-3 py-1.5 sm:px-2.5 sm:py-1 text-xs text-red-600 hover:bg-red-50 hover:border-red-300 transition-all flex items-center gap-1.5 sm:gap-1"
-                            >
-                              <i className="ti ti-trash" aria-hidden="true"></i> Delete
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+                          </>
+                        )}
+                        {appt.status === "Confirmed" && (
+                          <button
+                            onClick={() => handleUpdateStatus(appt._id, "Cancelled")}
+                            className="border border-red-200 rounded-md px-2.5 py-1 text-xs text-red-600 hover:bg-red-50 hover:border-red-300 transition-all flex items-center gap-1"
+                          >
+                            <i className="ti ti-x" aria-hidden="true"></i> Cancel
+                          </button>
+                        )}
+                        {appt.status === "Cancelled" && (
+                          <button
+                            onClick={() => handleDelete(appt._id)}
+                            className="border border-red-200 rounded-md px-2.5 py-1 text-xs text-red-600 hover:bg-red-50 hover:border-red-300 transition-all flex items-center gap-1"
+                          >
+                            <i className="ti ti-trash" aria-hidden="true"></i> Delete
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
