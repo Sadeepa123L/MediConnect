@@ -14,15 +14,15 @@ export default function DashboardLayout() {
     return 'Overview';
   };
 
-  return (
-    <div className="flex min-h-screen bg-gray-50 border border-gray-200 rounded-xl overflow-hidden font-sans">
-      <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <div className="flex-1 flex flex-col overflow-hidden min-w-0">
-        <Topbar title={getTitle()} onMenuClick={() => setSidebarOpen(true)} />
-        <div className="p-4 sm:p-6 overflow-y-auto flex-1">
-          <Outlet />
-        </div>
+return (
+  <div className="flex min-h-screen bg-gray-50 font-sans">
+    <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+    <div className="flex-1 flex flex-col overflow-hidden min-w-0">
+      <Topbar title={getTitle()} onMenuClick={() => setSidebarOpen(true)} />
+      <div className="p-4 sm:p-6 overflow-y-auto flex-1">
+        <Outlet />
       </div>
     </div>
-  );
+  </div>
+);
 }

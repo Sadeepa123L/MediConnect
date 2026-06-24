@@ -121,6 +121,7 @@ export const getAllAppointments = async (
     res.status(500).json({ message: "Server error", error });
   }
 };
+
 export const updateAppointmentStatus = async (
   req: Request,
   res: Response,
@@ -141,14 +142,18 @@ export const updateAppointmentStatus = async (
     }
 
     if (status === AppointmentStatus.CONFIRMED) {
-      await sendConfirmationEmail(
-        appointment.patientEmail,
-        appointment.patientName,
-        appointment.appointmentNumber,
-        appointment.doctorName,
-        appointment.date,
-        appointment.timeSlot,
-      );
+      try {
+        await sendConfirmationEmail(
+          appointment.patientEmail,
+          appointment.patientName,
+          appointment.appointmentNumber,
+          appointment.doctorName,
+          appointment.date,
+          appointment.timeSlot,
+        );
+      } catch (emailError) {
+        console.error("Failed to send confirmation email:", emailError);
+      }
     }
 
     res.status(200).json({
