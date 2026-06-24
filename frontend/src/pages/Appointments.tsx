@@ -29,8 +29,10 @@ export default function Appointments() {
 
   const handleUpdateStatus = async (id: string, status: AppointmentStatus) => {
     try {
-      await updateAppointmentStatus(id, status);
-      fetchAppointments();
+      const updated = await updateAppointmentStatus(id, status);
+      setAppointments((prev) =>
+        prev.map((a) => (a._id === id ? { ...a, status: updated.status } : a))
+      );
     } catch (error) {
       console.error("Failed to update appointment status:", error);
     }
@@ -44,7 +46,7 @@ export default function Appointments() {
 
     try {
       await deleteAppointment(id);
-      fetchAppointments();
+      setAppointments((prev) => prev.filter((a) => a._id !== id));
     } catch (error) {
       console.error("Failed to delete appointment:", error);
     }
