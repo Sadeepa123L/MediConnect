@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { DayPicker } from 'react-day-picker';
-import { format } from 'date-fns';
 import { getAllDoctors } from '../services/doctorService';
 import { bookAppointment } from '../services/appoinmentService';
 import type { Doctor } from '../types/doctor';
@@ -43,8 +41,6 @@ export default function BookingPage() {
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [timeSlots, setTimeSlots] = useState<string[]>([]);
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
-  const [showCalendar, setShowCalendar] = useState(false);
 
   const [formData, setFormData] = useState({
     doctorId: '',
@@ -109,15 +105,6 @@ export default function BookingPage() {
     }
   };
 
-  const handleDateSelect = (date: Date | undefined) => {
-    setSelectedDate(date);
-    setFormData(prev => ({
-      ...prev,
-      date: date ? format(date, 'yyyy-MM-dd') : '',
-    }));
-    setShowCalendar(false);
-  };
-
   const handleNextStep = () => {
     if (!formData.doctorId || !formData.date || !formData.timeSlot) {
       alert('Please fill all fields to proceed!');
@@ -154,41 +141,43 @@ export default function BookingPage() {
   };
 
   const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const todayString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
 
   const selectedDoctor = doctors.find(d => d._id === formData.doctorId);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
-      <header className="bg-white border-b border-gray-200 py-4 px-6 sticky top-0 z-50">
+    <div className="min-h-screen bg-[#FBF6EF] flex flex-col font-sans">
+      <header className="bg-[#FBF6EF]/90 backdrop-blur-sm py-4 px-6 sticky top-0 z-50">
         <div className="max-w-5xl mx-auto flex justify-between items-center">
-          <Link to="/" className="flex items-center gap-2 text-xl font-bold text-gray-900">
-            <i className="ti ti-heartbeat text-[#185FA5] text-2xl"></i>
+          <Link to="/" className="flex items-center gap-2 text-xl font-semibold text-[#332B25]" style={{ fontFamily: "'Fraunces', serif" }}>
+            <div className="w-8 h-8 rounded-full bg-[#2A6B63] flex items-center justify-center">
+              <i className="ti ti-heartbeat text-[#FBF6EF] text-base" aria-hidden="true"></i>
+            </div>
             <span>MediCare</span>
           </Link>
-          <Link to="/" className="text-sm text-gray-500 hover:text-gray-900 flex items-center gap-1">
-            <i className="ti ti-arrow-left"></i> Back to Home
+          <Link to="/" className="text-sm text-[#5C5249] hover:text-[#2A6B63] flex items-center gap-1 transition-colors">
+            <i className="ti ti-arrow-left" aria-hidden="true"></i> Back to home
           </Link>
         </div>
       </header>
 
       <main className="grow flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-100 max-w-xl w-full overflow-hidden">
+        <div className="bg-white rounded-[28px] shadow-[0_20px_60px_-15px_rgba(51,43,37,0.15)] max-w-xl w-full overflow-hidden">
 
           {step <= 2 && (
-            <div className="bg-gray-50 px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+            <div className="bg-[#F4EDE1] px-6 py-4 flex justify-between items-center">
               <div className="flex items-center gap-2">
-                <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${step === 1 ? 'bg-[#185FA5] text-white' : 'bg-green-500 text-white'}`}>
+                <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${step === 1 ? 'bg-[#2A6B63] text-white' : 'bg-[#A8C4B0] text-white'}`}>
                   {step > 1 ? '✓' : '1'}
                 </span>
-                <span className={`text-sm font-medium ${step === 1 ? 'text-gray-950' : 'text-gray-400'}`}>Select Doctor & Time</span>
+                <span className={`text-sm font-medium ${step === 1 ? 'text-[#332B25]' : 'text-[#A39A8C]'}`}>Select doctor & time</span>
               </div>
-              <div className="h-0.5 bg-gray-200 grow mx-4"></div>
+              <div className="h-0.5 bg-[#E8DFD0] grow mx-4"></div>
               <div className="flex items-center gap-2">
-                <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${step === 2 ? 'bg-[#185FA5] text-white' : 'bg-gray-200 text-gray-600'}`}>
+                <span className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold ${step === 2 ? 'bg-[#2A6B63] text-white' : 'bg-[#E8DFD0] text-[#A39A8C]'}`}>
                   2
                 </span>
-                <span className={`text-sm font-medium ${step === 2 ? 'text-gray-950' : 'text-gray-400'}`}>Patient Information</span>
+                <span className={`text-sm font-medium ${step === 2 ? 'text-[#332B25]' : 'text-[#A39A8C]'}`}>Patient information</span>
               </div>
             </div>
           )}
@@ -197,19 +186,21 @@ export default function BookingPage() {
 
             {step === 1 && (
               <div className="space-y-5">
-                <h2 className="text-xl font-bold text-gray-900">Find Your Schedule</h2>
+                <h2 className="text-2xl font-semibold text-[#332B25]" style={{ fontFamily: "'Fraunces', serif" }}>
+                  Find your schedule
+                </h2>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Select Doctor & Specialty</label>
+                  <label className="block text-sm font-medium text-[#332B25] mb-1.5">Select doctor & specialty</label>
                   <select
                     name="doctorId"
                     value={formData.doctorId}
                     onChange={handleDoctorChange}
                     disabled={loadingDoctors}
-                    className="w-full p-3 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-[#185FA5]/20 focus:border-[#185FA5] text-gray-700 bg-white"
+                    className="w-full p-3.5 border border-[#E8DFD0] rounded-2xl outline-none focus:ring-2 focus:ring-[#2A6B63]/15 focus:border-[#2A6B63] text-[#332B25] bg-white transition-all"
                   >
                     <option value="">
-                      {loadingDoctors ? '-- Loading doctors... --' : '-- Choose a Doctor --'}
+                      {loadingDoctors ? '-- Loading doctors... --' : '-- Choose a doctor --'}
                     </option>
                     {doctors.map(doc => (
                       <option key={doc._id} value={doc._id}>{doc.name} ({doc.specialty})</option>
@@ -218,61 +209,43 @@ export default function BookingPage() {
                 </div>
 
                 {selectedDoctor && (
-                  <p className="text-xs text-gray-500 bg-gray-50 px-3 py-2 rounded-lg">
+                  <p className="text-xs text-[#5C5249] bg-[#F4EDE1] px-3.5 py-2.5 rounded-xl">
                     Available {selectedDoctor.availableDays.join(', ')}
                     {' '}between{' '}
                     {selectedDoctor.availableTime.start} - {selectedDoctor.availableTime.end}
                   </p>
                 )}
 
-                <div className="relative">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Preferred Date</label>
-                  <button
-                    type="button"
-                    onClick={() => setShowCalendar(prev => !prev)}
-                    className="w-full p-3 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-[#185FA5]/20 focus:border-[#185FA5] text-left flex items-center justify-between bg-white"
-                  >
-                    <span className={selectedDate ? 'text-gray-900' : 'text-gray-400'}>
-                      {selectedDate ? format(selectedDate, 'EEEE, MMMM d, yyyy') : 'Select a date'}
-                    </span>
-                    <i className="ti ti-calendar text-gray-400"></i>
-                  </button>
-
-                  {showCalendar && (
-                    <div className="absolute z-10 mt-2 bg-white border border-gray-200 rounded-xl shadow-lg p-3">
-                      <DayPicker
-                        mode="single"
-                        selected={selectedDate}
-                        onSelect={handleDateSelect}
-                        disabled={{ before: today }}
-                        classNames={{
-                          today: 'text-[#185FA5] font-bold',
-                          selected: 'bg-[#185FA5] text-white rounded-md',
-                          day_button: 'rounded-md hover:bg-blue-50',
-                        }}
-                      />
-                    </div>
-                  )}
+                <div>
+                  <label className="block text-sm font-medium text-[#332B25] mb-1.5">Preferred date</label>
+                  <input
+                    type="date"
+                    name="date"
+                    value={formData.date}
+                    min={todayString}
+                    onChange={handleChange}
+                    className="w-full p-3.5 border border-[#E8DFD0] rounded-2xl outline-none focus:ring-2 focus:ring-[#2A6B63]/15 focus:border-[#2A6B63] text-[#332B25] bg-white transition-all"
+                  />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Available Time Slot</label>
+                  <label className="block text-sm font-medium text-[#332B25] mb-1.5">Available time slot</label>
                   <select
                     name="timeSlot"
                     value={formData.timeSlot}
                     onChange={handleChange}
                     disabled={!formData.doctorId}
-                    className="w-full p-3 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-[#185FA5]/20 focus:border-[#185FA5] text-gray-700 bg-white disabled:bg-gray-50 disabled:text-gray-400"
+                    className="w-full p-3.5 border border-[#E8DFD0] rounded-2xl outline-none focus:ring-2 focus:ring-[#2A6B63]/15 focus:border-[#2A6B63] text-[#332B25] bg-white disabled:bg-[#F4EDE1] disabled:text-[#A39A8C] transition-all"
                   >
                     <option value="">
-                      {!formData.doctorId ? '-- Select a doctor first --' : '-- Choose a Time --'}
+                      {!formData.doctorId ? '-- Select a doctor first --' : '-- Choose a time --'}
                     </option>
                     {timeSlots.map(slot => (
                       <option key={slot} value={slot}>{slot}</option>
                     ))}
                   </select>
                   {formData.doctorId && timeSlots.length === 0 && (
-                    <p className="text-xs text-red-500 mt-1">
+                    <p className="text-xs text-[#C2553D] mt-1.5">
                       This doctor has no available time slots configured.
                     </p>
                   )}
@@ -281,9 +254,9 @@ export default function BookingPage() {
                 <button
                   type="button"
                   onClick={handleNextStep}
-                  className="w-full mt-4 bg-[#185FA5] text-white py-3 rounded-lg font-medium hover:bg-[#0C447C] transition-all flex items-center justify-center gap-2"
+                  className="w-full mt-4 bg-[#EF8354] text-white py-3.5 rounded-2xl font-medium hover:bg-[#DD6E3D] transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5 flex items-center justify-center gap-2"
                 >
-                  Continue to Details <i className="ti ti-arrow-right"></i>
+                  Continue to details <i className="ti ti-arrow-right" aria-hidden="true"></i>
                 </button>
               </div>
             )}
@@ -291,20 +264,22 @@ export default function BookingPage() {
             {step === 2 && (
               <div className="space-y-5">
                 <div className="flex justify-between items-center">
-                  <h2 className="text-xl font-bold text-gray-900">Patient Information</h2>
-                  <span className="text-xs bg-blue-50 text-[#185FA5] px-2 py-1 rounded font-medium">
+                  <h2 className="text-2xl font-semibold text-[#332B25]" style={{ fontFamily: "'Fraunces', serif" }}>
+                    Patient information
+                  </h2>
+                  <span className="text-xs bg-[#A8C4B0]/25 text-[#2A6B63] px-2.5 py-1 rounded-full font-medium">
                     {formData.doctorName}
                   </span>
                 </div>
 
                 {errorMessage && (
-                  <p className="text-sm text-red-600 bg-red-50 py-2 px-3 rounded-lg">
+                  <p className="text-sm text-[#C2553D] bg-[#F9E4DC] py-2.5 px-3.5 rounded-xl">
                     {errorMessage}
                   </p>
                 )}
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                  <label className="block text-sm font-medium text-[#332B25] mb-1.5">Full name</label>
                   <input
                     type="text"
                     name="patientName"
@@ -312,13 +287,13 @@ export default function BookingPage() {
                     value={formData.patientName}
                     onChange={handleChange}
                     placeholder="John Doe"
-                    className="w-full p-3 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-[#185FA5]/20 focus:border-[#185FA5]"
+                    className="w-full p-3.5 border border-[#E8DFD0] rounded-2xl outline-none focus:ring-2 focus:ring-[#2A6B63]/15 focus:border-[#2A6B63] text-[#332B25] placeholder:text-[#A39A8C] transition-all"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                    <label className="block text-sm font-medium text-[#332B25] mb-1.5">Email address</label>
                     <input
                       type="email"
                       name="patientEmail"
@@ -326,11 +301,11 @@ export default function BookingPage() {
                       value={formData.patientEmail}
                       onChange={handleChange}
                       placeholder="john@example.com"
-                      className="w-full p-3 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-[#185FA5]/20 focus:border-[#185FA5]"
+                      className="w-full p-3.5 border border-[#E8DFD0] rounded-2xl outline-none focus:ring-2 focus:ring-[#2A6B63]/15 focus:border-[#2A6B63] text-[#332B25] placeholder:text-[#A39A8C] transition-all"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                    <label className="block text-sm font-medium text-[#332B25] mb-1.5">Phone number</label>
                     <input
                       type="tel"
                       name="patientPhone"
@@ -338,37 +313,37 @@ export default function BookingPage() {
                       value={formData.patientPhone}
                       onChange={handleChange}
                       placeholder="0771234567"
-                      className="w-full p-3 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-[#185FA5]/20 focus:border-[#185FA5]"
+                      className="w-full p-3.5 border border-[#E8DFD0] rounded-2xl outline-none focus:ring-2 focus:ring-[#2A6B63]/15 focus:border-[#2A6B63] text-[#332B25] placeholder:text-[#A39A8C] transition-all"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Symptoms / Notes (Optional)</label>
+                  <label className="block text-sm font-medium text-[#332B25] mb-1.5">Symptoms / notes (optional)</label>
                   <textarea
                     name="notes"
                     value={formData.notes}
                     onChange={handleChange}
                     placeholder="Briefly describe your condition..."
                     rows={3}
-                    className="w-full p-3 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-[#185FA5]/20 focus:border-[#185FA5] resize-none"
+                    className="w-full p-3.5 border border-[#E8DFD0] rounded-2xl outline-none focus:ring-2 focus:ring-[#2A6B63]/15 focus:border-[#2A6B63] text-[#332B25] placeholder:text-[#A39A8C] resize-none transition-all"
                   />
                 </div>
 
-                <div className="flex gap-4 pt-2">
+                <div className="flex gap-3 pt-2">
                   <button
                     type="button"
                     onClick={() => setStep(1)}
-                    className="w-1/3 bg-gray-100 text-gray-700 py-3 rounded-lg font-medium hover:bg-gray-200 transition-all"
+                    className="w-1/3 bg-[#F4EDE1] text-[#5C5249] py-3.5 rounded-2xl font-medium hover:bg-[#E8DFD0] transition-all"
                   >
                     Back
                   </button>
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="w-2/3 bg-green-600 text-white py-3 rounded-lg font-medium hover:bg-green-700 transition-all shadow-md flex items-center justify-center gap-2 disabled:opacity-60"
+                    className="w-2/3 bg-[#2A6B63] text-white py-3.5 rounded-2xl font-medium hover:bg-[#235953] transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 disabled:opacity-60"
                   >
-                    {submitting ? 'Booking...' : 'Confirm Appointment'} <i className="ti ti-check"></i>
+                    {submitting ? 'Booking...' : 'Confirm appointment'} <i className="ti ti-check" aria-hidden="true"></i>
                   </button>
                 </div>
               </div>
@@ -376,31 +351,42 @@ export default function BookingPage() {
 
             {step === 3 && (
               <div className="text-center py-6 space-y-5">
-                <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-3xl mx-auto shadow-inner animate-bounce">
+                <div className="w-16 h-16 bg-[#A8C4B0]/30 text-[#2A6B63] rounded-full flex items-center justify-center text-3xl mx-auto">
                   ✓
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-gray-900">Booking Confirmed!</h2>
-                  <p className="text-sm text-gray-500 mt-1">Your appointment request has been placed successfully.</p>
+                  <h2 className="text-2xl font-semibold text-[#332B25]" style={{ fontFamily: "'Fraunces', serif" }}>
+                    Booking confirmed!
+                  </h2>
+                  <p className="text-sm text-[#5C5249] mt-1.5">Your appointment request has been placed successfully.</p>
                 </div>
 
-                <div className="bg-gray-50 rounded-xl p-4 border border-gray-100 max-w-sm mx-auto space-y-2 text-left text-sm">
-                  <div className="flex justify-between"><span className="text-gray-500">Appointment No:</span> <span className="font-bold text-[#185FA5]">{successBookingNumber}</span></div>
-                  <div className="flex justify-between"><span className="text-gray-500">Doctor:</span> <span className="font-semibold text-gray-800">{formData.doctorName}</span></div>
-                  <div className="flex justify-between"><span className="text-gray-500">Date & Time:</span> <span className="font-semibold text-gray-800">{formData.date} | {formData.timeSlot}</span></div>
-                  <div className="flex justify-between"><span className="text-gray-500">Patient:</span> <span className="font-semibold text-gray-800">{formData.patientName}</span></div>
+                <div className="relative bg-[#F4EDE1] rounded-2xl p-5 max-w-sm mx-auto space-y-2.5 text-left text-sm overflow-hidden">
+                  <div
+                    className="absolute -top-2 left-1/2 -translate-x-1/2 w-full h-3 bg-white"
+                    style={{
+                      maskImage: 'radial-gradient(circle at 8px 0, transparent 6px, black 6.5px)',
+                      maskSize: '16px 100%',
+                      maskRepeat: 'repeat-x',
+                    }}
+                    aria-hidden="true"
+                  ></div>
+                  <div className="flex justify-between"><span className="text-[#8A8074]">Appointment no:</span> <span className="font-semibold text-[#2A6B63]">{successBookingNumber}</span></div>
+                  <div className="flex justify-between"><span className="text-[#8A8074]">Doctor:</span> <span className="font-medium text-[#332B25]">{formData.doctorName}</span></div>
+                  <div className="flex justify-between"><span className="text-[#8A8074]">Date & time:</span> <span className="font-medium text-[#332B25]">{formData.date} | {formData.timeSlot}</span></div>
+                  <div className="flex justify-between"><span className="text-[#8A8074]">Patient:</span> <span className="font-medium text-[#332B25]">{formData.patientName}</span></div>
                 </div>
 
-                <p className="text-xs text-amber-600 bg-amber-50 py-2 px-3 rounded-lg inline-block">
-                  ⚠️ Status is pending. Admin will confirm your slot via phone or email.
+                <p className="text-xs text-[#854F0B] bg-[#FAEEDA] py-2.5 px-3.5 rounded-xl inline-block">
+                  Status is pending. Admin will confirm your slot via phone or email.
                 </p>
 
                 <button
                   type="button"
                   onClick={() => navigate('/')}
-                  className="w-full bg-gray-900 text-white py-3 rounded-lg font-medium hover:bg-gray-800 transition-all block text-center"
+                  className="w-full bg-[#332B25] text-white py-3.5 rounded-2xl font-medium hover:bg-[#241D19] transition-all block text-center"
                 >
-                  Go back to Homepage
+                  Go back to homepage
                 </button>
               </div>
             )}
