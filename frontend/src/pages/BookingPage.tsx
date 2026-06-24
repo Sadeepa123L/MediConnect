@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { getAllDoctors } from '../services/doctorService';
 import { bookAppointment } from '../services/appoinmentService';
 import type { Doctor } from '../types/doctor';
@@ -34,6 +34,7 @@ const generateTimeSlots = (start: string, end: string): string[] => {
 
 export default function BookingPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [step, setStep] = useState(1);
 
   const [doctors, setDoctors] = useState<Doctor[]>([]);
@@ -59,6 +60,30 @@ export default function BookingPage() {
   useEffect(() => {
     fetchDoctors();
   }, []);
+
+  useEffect(() => {
+    if (doctors.length === 0) return;
+
+    const preselectedId = searchParams.get('doctorId');
+    if (!preselectedId) return;
+
+    const preselectedDoc = doctors.find(doc => doc._id === preselectedId);
+    if (!preselectedDoc) return;
+
+    setFormData(prev => ({
+      ...prev,
+      doctorId: preselectedDoc._id,
+      doctorName: preselectedDoc.name,
+      doctorSpecialty: preselectedDoc.specialty,
+      timeSlot: '',
+    }));
+
+    const slots = generateTimeSlots(
+      preselectedDoc.availableTime.start,
+      preselectedDoc.availableTime.end
+    );
+    setTimeSlots(slots);
+  }, [doctors, searchParams]);
 
   const fetchDoctors = async () => {
     try {
