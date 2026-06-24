@@ -6,6 +6,7 @@ import type { Appointment } from '../../types/appointment';
 export default function Header() {
   const [showHelp, setShowHelp] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false); // New state for hamburger menu
 
   const [appointmentNumber, setAppointmentNumber] = useState('');
   const [searching, setSearching] = useState(false);
@@ -86,7 +87,8 @@ export default function Header() {
               <a href="#services" className="text-[#5C5249] hover:text-[#2A6B63] font-medium transition-colors text-[15px]">Services</a>
             </nav>
 
-            <div className="flex items-center gap-1 sm:gap-2">
+            <div className="flex items-center gap-2 sm:gap-2">
+              {/* Desktop Only Buttons */}
               <button
                 onClick={() => setShowSearch(true)}
                 className="hidden sm:inline-flex items-center gap-1.5 text-[#5C5249] hover:text-[#2A6B63] px-3 py-2 rounded-full text-sm font-medium transition-colors"
@@ -94,13 +96,7 @@ export default function Header() {
                 <i className="ti ti-search text-base" aria-hidden="true"></i>
                 My appointment
               </button>
-              <button
-                onClick={() => setShowSearch(true)}
-                className="sm:hidden text-[#5C5249] hover:text-[#2A6B63] p-2 rounded-full transition-colors"
-                aria-label="Search my appointment"
-              >
-                <i className="ti ti-search text-xl" aria-hidden="true"></i>
-              </button>
+              
               <button
                 onClick={() => setShowHelp(true)}
                 className="hidden sm:inline-flex items-center gap-1.5 text-[#5C5249] hover:text-[#2A6B63] px-3 py-2 rounded-full text-sm font-medium transition-colors"
@@ -108,19 +104,58 @@ export default function Header() {
                 <i className="ti ti-help-circle text-base" aria-hidden="true"></i>
                 Help
               </button>
-              <button
-                onClick={() => setShowHelp(true)}
-                className="sm:hidden text-[#5C5249] hover:text-[#2A6B63] p-2 rounded-full transition-colors"
-                aria-label="Help"
-              >
-                <i className="ti ti-help-circle text-xl" aria-hidden="true"></i>
-              </button>
+
+              {/* Book Appointment - Always Visible */}
               <Link
                 to="/book"
-                className="bg-[#EF8354] text-white px-4 sm:px-5 py-2.5 rounded-full text-sm font-medium hover:bg-[#DD6E3D] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5"
+                className="bg-[#EF8354] text-white px-4 sm:px-5 py-2.5 rounded-full text-sm font-medium hover:bg-[#DD6E3D] transition-all shadow-sm hover:shadow-md hover:-translate-y-0.5 whitespace-nowrap"
               >
                 Book appointment
               </Link>
+
+              {/* Mobile Hamburger Menu Container */}
+              <div className="relative sm:hidden ml-1">
+                <button
+                  onClick={() => setShowMobileMenu(!showMobileMenu)}
+                  className="text-[#5C5249] hover:text-[#2A6B63] p-2 rounded-full transition-colors flex items-center justify-center"
+                  aria-label="Toggle menu"
+                  aria-expanded={showMobileMenu}
+                >
+                  <i className={`ti ${showMobileMenu ? 'ti-x' : 'ti-menu-2'} text-2xl`} aria-hidden="true"></i>
+                </button>
+
+                {/* Mobile Dropdown */}
+                {showMobileMenu && (
+                  <>
+                    <div 
+                      className="fixed inset-0 z-40" 
+                      onClick={() => setShowMobileMenu(false)}
+                    ></div>
+                    <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-2xl shadow-[0_10px_40px_-10px_rgba(51,43,37,0.2)] py-2 border border-[#F4EDE1] z-50">
+                      <button
+                        onClick={() => {
+                          setShowSearch(true);
+                          setShowMobileMenu(false);
+                        }}
+                        className="w-full text-left px-5 py-3 text-[15px] font-medium text-[#5C5249] hover:text-[#2A6B63] hover:bg-[#FBF6EF] transition-colors flex items-center gap-3"
+                      >
+                        <i className="ti ti-search text-lg" aria-hidden="true"></i>
+                        My appointment
+                      </button>
+                      <button
+                        onClick={() => {
+                          setShowHelp(true);
+                          setShowMobileMenu(false);
+                        }}
+                        className="w-full text-left px-5 py-3 text-[15px] font-medium text-[#5C5249] hover:text-[#2A6B63] hover:bg-[#FBF6EF] transition-colors flex items-center gap-3"
+                      >
+                        <i className="ti ti-help-circle text-lg" aria-hidden="true"></i>
+                        Help
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>
