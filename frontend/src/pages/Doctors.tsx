@@ -129,57 +129,73 @@ export default function Doctors() {
   ];
 
   return (
-    <div className="animate-fadeIn">
-      <div className="bg-white border border-gray-200 rounded-xl p-4 sm:p-5 mb-5">
-        <div className="flex items-center justify-between mb-4 gap-2">
-          <h3 className="text-sm sm:text-[15px] font-medium text-gray-900">All doctors</h3>
-          <button
-            onClick={handleOpenAdd}
-            className="inline-flex items-center gap-1.5 bg-[#185FA5] text-white rounded-md px-3 sm:px-3.5 py-1.5 text-xs sm:text-[13px] font-sans hover:bg-[#0C447C] transition-all shrink-0"
-          >
-            <i className="ti ti-plus" aria-hidden="true"></i> <span className="hidden sm:inline">Add doctor</span><span className="sm:hidden">Add</span>
-          </button>
-        </div>
+    <div className="animate-fadeIn relative min-h-full">
+      <div className="absolute -top-10 -right-10 w-72 h-72 rounded-full bg-[#A8C4B0]/15 blur-3xl -z-10 pointer-events-none" aria-hidden="true"></div>
+      <div className="absolute bottom-10 -left-10 w-72 h-72 rounded-full bg-[#EF8354]/5 blur-3xl -z-10 pointer-events-none" aria-hidden="true"></div>
 
-        <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+        <div>
+          <h2 className="text-2xl sm:text-3xl font-semibold text-[#332B25] tracking-tight" style={{ fontFamily: "'Fraunces', serif" }}>
+            Doctor management
+          </h2>
+          <p className="text-sm text-[#5C5249] mt-1">Add, update, and manage doctor schedules.</p>
+        </div>
+        <button
+          onClick={handleOpenAdd}
+          className="inline-flex items-center gap-2 bg-[#EF8354] text-white rounded-xl px-5 py-2.5 text-sm font-medium hover:bg-[#DD6E3D] hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 shrink-0 cursor-pointer"
+        >
+          <i className="ti ti-plus text-base" aria-hidden="true"></i> <span>Add doctor</span>
+        </button>
+      </div>
+
+      <div className="bg-gradient-to-br from-[#F3F7F5] to-[#FAF8F5] border border-[#E8DFD0]/50 rounded-[28px] p-6 shadow-[0_8px_24px_-8px_rgba(51,43,37,0.08)] mb-6">
+        <div className="overflow-x-auto -mx-6 sm:mx-0 px-6 sm:px-0">
           <table className="w-full border-collapse text-[13px] min-w-190">
             <thead>
               <tr>
-                <th className="text-left p-2 px-3 text-xs font-medium text-gray-500 border-b border-gray-200">Name</th>
-                <th className="text-left p-2 px-3 text-xs font-medium text-gray-500 border-b border-gray-200">Specialty</th>
-                <th className="text-left p-2 px-3 text-xs font-medium text-gray-500 border-b border-gray-200">Phone</th>
-                <th className="text-left p-2 px-3 text-xs font-medium text-gray-500 border-b border-gray-200">Fee (LKR)</th>
-                <th className="text-left p-2 px-3 text-xs font-medium text-gray-500 border-b border-gray-200">Available days</th>
-                <th className="text-left p-2 px-3 text-xs font-medium text-gray-500 border-b border-gray-200">Status</th>
-                <th className="text-left p-2 px-3 text-xs font-medium text-gray-500 border-b border-gray-200">Actions</th>
+                <th className="text-left p-3.5 px-4 text-xs font-semibold text-[#5C5249] uppercase tracking-wider border-b border-[#F4EDE1]">Name</th>
+                <th className="text-left p-3.5 px-4 text-xs font-semibold text-[#5C5249] uppercase tracking-wider border-b border-[#F4EDE1]">Specialty</th>
+                <th className="text-left p-3.5 px-4 text-xs font-semibold text-[#5C5249] uppercase tracking-wider border-b border-[#F4EDE1]">Phone</th>
+                <th className="text-left p-3.5 px-4 text-xs font-semibold text-[#5C5249] uppercase tracking-wider border-b border-[#F4EDE1]">Fee (LKR)</th>
+                <th className="text-left p-3.5 px-4 text-xs font-semibold text-[#5C5249] uppercase tracking-wider border-b border-[#F4EDE1]">Available days</th>
+                <th className="text-left p-3.5 px-4 text-xs font-semibold text-[#5C5249] uppercase tracking-wider border-b border-[#F4EDE1]">Status</th>
+                <th className="text-left p-3.5 px-4 text-xs font-semibold text-[#5C5249] uppercase tracking-wider border-b border-[#F4EDE1]">Actions</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={7} className="text-center p-4 text-gray-400">
+                  <td colSpan={7} className="text-center p-6 text-sm text-[#A39A8C]">
                     Loading doctors...
                   </td>
                 </tr>
               ) : doctors.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="text-center p-4 text-gray-400">
+                  <td colSpan={7} className="text-center p-6 text-sm text-[#A39A8C]">
                     No doctors found
                   </td>
                 </tr>
               ) : (
                 doctors.map((doc) => (
-                  <tr key={doc._id} className="hover:bg-gray-50/70">
-                    <td className="p-2.5 px-3 border-b border-gray-100 text-gray-900 whitespace-nowrap">
-                      <strong>{doc.name}</strong>
+                  <tr key={doc._id} className="hover:bg-[#FBF6EF]/50 transition-colors duration-200">
+                    <td className="p-3.5 px-4 border-b border-[#F4EDE1] text-[#332B25] font-semibold whitespace-nowrap">
+                      {doc.name}
                     </td>
-                    <td className="p-2.5 px-3 border-b border-gray-100 text-gray-950 whitespace-nowrap">{doc.specialty}</td>
-                    <td className="p-2.5 px-3 border-b border-gray-100 text-gray-950 whitespace-nowrap">{doc.phone}</td>
-                    <td className="p-2.5 px-3 border-b border-gray-100 text-gray-950 whitespace-nowrap">{doc.consultationFee.toLocaleString()}</td>
-                    <td className="p-2.5 px-3 border-b border-gray-100 text-gray-950 whitespace-nowrap">{doc.availableDays.join(", ")}</td>
-                    <td className="p-2.5 px-3 border-b border-gray-100 whitespace-nowrap">
+                    <td className="p-3.5 px-4 border-b border-[#F4EDE1] text-[#5C5249] whitespace-nowrap">{doc.specialty}</td>
+                    <td className="p-3.5 px-4 border-b border-[#F4EDE1] text-[#5C5249] whitespace-nowrap">{doc.phone}</td>
+                    <td className="p-3.5 px-4 border-b border-[#F4EDE1] text-[#332B25] font-medium whitespace-nowrap">{doc.consultationFee.toLocaleString()}</td>
+                    <td className="p-3.5 px-4 border-b border-[#F4EDE1] whitespace-nowrap">
+                      <div className="flex flex-wrap gap-1">
+                        {doc.availableDays.map((day) => (
+                          <span key={day} className="inline-block bg-[#FBF6EF] text-[#5C5249] px-2 py-0.5 rounded-lg text-[11px] font-medium border border-[#E8DFD0]/40">
+                            {day.slice(0, 3)}
+                          </span>
+                        ))}
+                      </div>
+                    </td>
+                    <td className="p-3.5 px-4 border-b border-[#F4EDE1] whitespace-nowrap">
                       <span
-                        className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-medium ${
+                        className={`inline-block px-2.5 py-0.5 rounded-full text-[11px] font-semibold tracking-wide ${
                           doc.isActive
                             ? "bg-[#EAF3DE] text-[#3B6D11]"
                             : "bg-[#FAEEDA] text-[#854F0B]"
@@ -188,17 +204,17 @@ export default function Doctors() {
                         {doc.isActive ? "Active" : "Inactive"}
                       </span>
                     </td>
-                    <td className="p-2.5 px-3 border-b border-gray-100 whitespace-nowrap">
-                      <div className="flex gap-1.5">
+                    <td className="p-3.5 px-4 border-b border-[#F4EDE1] whitespace-nowrap">
+                      <div className="flex gap-2">
                         <button
                           onClick={() => handleOpenEdit(doc)}
-                          className="inline-flex items-center gap-1 bg-transparent border border-gray-200 rounded-md px-2.5 py-1 text-xs text-gray-500 hover:bg-gray-50 transition-all"
+                          className="inline-flex items-center gap-1 bg-white border border-[#2A6B63]/25 text-[#2A6B63] hover:bg-[#2A6B63]/5 hover:border-[#2A6B63] hover:shadow-xs transition-all duration-200 rounded-xl px-3 py-1.5 text-xs font-semibold cursor-pointer"
                         >
                           <i className="ti ti-edit" aria-hidden="true"></i> Edit
                         </button>
                         <button
                           onClick={() => handleDelete(doc._id)}
-                          className="inline-flex items-center gap-1 bg-transparent border border-red-200 rounded-md px-2.5 py-1 text-xs text-red-600 hover:bg-red-50 transition-all"
+                          className="inline-flex items-center gap-1 bg-white border border-red-200 text-red-600 hover:bg-red-50 hover:border-red-300 transition-all duration-200 rounded-xl px-3 py-1.5 text-xs font-semibold cursor-pointer"
                         >
                           <i className="ti ti-trash" aria-hidden="true"></i> Delete
                         </button>
@@ -213,112 +229,115 @@ export default function Doctors() {
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 animate-fadeIn p-4">
-          <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6 w-full sm:w-120 max-w-full sm:max-w-[90%] shadow-xl max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-[15px] font-medium text-gray-900">
-                {editingDoctor ? "Edit doctor" : "Add doctor"}
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center z-50 animate-fadeIn p-4">
+          <div className="bg-gradient-to-br from-[#F3F7F5] to-[#FAF8F5] rounded-[28px] border border-[#E8DFD0]/50 p-6 md:p-8 w-full sm:w-130 max-w-full shadow-2xl max-h-[90vh] overflow-y-auto relative animate-scaleUp">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-semibold text-[#332B25]" style={{ fontFamily: "'Fraunces', serif" }}>
+                {editingDoctor ? "Edit doctor details" : "Register new doctor"}
               </h3>
-              <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-600">
+              <button onClick={() => setIsModalOpen(false)} className="text-[#A39A8C] hover:text-[#332B25] p-1.5 rounded-full hover:bg-[#FBF6EF] transition-all cursor-pointer">
                 <i className="ti ti-x text-lg" aria-hidden="true"></i>
               </button>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-medium text-gray-500">Full name</label>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold text-[#5C5249] uppercase tracking-wider">Full name</label>
                 <input
                   type="text"
                   name="name"
                   placeholder="Dr. John Silva"
                   value={formData.name}
                   onChange={handleChange}
-                  className="p-2 border border-gray-200 rounded-md text-sm outline-none focus:border-[#185FA5]"
+                  className="p-3 border border-[#E8DFD0] rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#2A6B63]/15 focus:border-[#2A6B63] transition-all text-[#332B25] placeholder:text-[#A39A8C]"
                 />
               </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-medium text-gray-500">Specialty</label>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold text-[#5C5249] uppercase tracking-wider">Specialty</label>
                 <input
                   type="text"
                   name="specialty"
                   placeholder="Cardiologist"
                   value={formData.specialty}
                   onChange={handleChange}
-                  className="p-2 border border-gray-200 rounded-md text-sm outline-none focus:border-[#185FA5]"
+                  className="p-3 border border-[#E8DFD0] rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#2A6B63]/15 focus:border-[#2A6B63] transition-all text-[#332B25] placeholder:text-[#A39A8C]"
                 />
               </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-medium text-gray-500">Phone number</label>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold text-[#5C5249] uppercase tracking-wider">Phone number</label>
                 <input
                   type="text"
                   name="phone"
                   placeholder="+94771234567"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="p-2 border border-gray-200 rounded-md text-sm outline-none focus:border-[#185FA5]"
+                  className="p-3 border border-[#E8DFD0] rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#2A6B63]/15 focus:border-[#2A6B63] transition-all text-[#332B25] placeholder:text-[#A39A8C]"
                 />
               </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-medium text-gray-500">Consultation fee (LKR)</label>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold text-[#5C5249] uppercase tracking-wider">Consultation fee (LKR)</label>
                 <input
                   type="number"
                   name="consultationFee"
                   placeholder="2500"
                   value={formData.consultationFee}
                   onChange={handleChange}
-                  className="p-2 border border-gray-200 rounded-md text-sm outline-none focus:border-[#185FA5]"
+                  className="p-3 border border-[#E8DFD0] rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#2A6B63]/15 focus:border-[#2A6B63] transition-all text-[#332B25] placeholder:text-[#A39A8C]"
                 />
               </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-medium text-gray-500">Start time</label>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold text-[#5C5249] uppercase tracking-wider">Start time</label>
                 <input
                   type="time"
                   value={formData.availableTime.start}
                   onChange={(e) => handleTimeChange("start", e.target.value)}
-                  className="p-2 border border-gray-200 rounded-md text-sm outline-none focus:border-[#185FA5]"
+                  className="p-3 border border-[#E8DFD0] rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#2A6B63]/15 focus:border-[#2A6B63] transition-all text-[#332B25]"
                 />
               </div>
-              <div className="flex flex-col gap-1">
-                <label className="text-xs font-medium text-gray-500">End time</label>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold text-[#5C5249] uppercase tracking-wider">End time</label>
                 <input
                   type="time"
                   value={formData.availableTime.end}
                   onChange={(e) => handleTimeChange("end", e.target.value)}
-                  className="p-2 border border-gray-200 rounded-md text-sm outline-none focus:border-[#185FA5]"
+                  className="p-3 border border-[#E8DFD0] rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#2A6B63]/15 focus:border-[#2A6B63] transition-all text-[#332B25]"
                 />
               </div>
             </div>
 
-            <div className="mt-4">
-              <label className="text-xs font-medium text-gray-500 block mb-2">Available days</label>
+            <div className="mt-5">
+              <label className="text-xs font-semibold text-[#5C5249] uppercase tracking-wider block mb-2.5">Available days</label>
               <div className="flex flex-wrap gap-2">
-                {weekDays.map((day) => (
-                  <button
-                    type="button"
-                    key={day}
-                    onClick={() => handleDayToggle(day)}
-                    className={`px-2.5 py-1 rounded-md text-xs border transition-all ${
-                      formData.availableDays.includes(day)
-                        ? "bg-[#185FA5] text-white border-[#185FA5]"
-                        : "bg-white text-gray-500 border-gray-200 hover:bg-gray-50"
-                    }`}
-                  >
-                    {day.slice(0, 3)}
-                  </button>
-                ))}
+                {weekDays.map((day) => {
+                  const isSelected = formData.availableDays.includes(day);
+                  return (
+                    <button
+                      type="button"
+                      key={day}
+                      onClick={() => handleDayToggle(day)}
+                      className={`px-3 py-1.5 rounded-xl text-xs font-medium border transition-all cursor-pointer ${
+                        isSelected
+                          ? "bg-[#2A6B63] text-white border-[#2A6B63] shadow-xs"
+                          : "bg-white text-[#5C5249] border-[#E8DFD0] hover:bg-[#FBF6EF]"
+                      }`}
+                    >
+                      {day}
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row justify-end gap-2 mt-5">
+            <div className="flex flex-col sm:flex-row justify-end gap-3 mt-6 pt-2">
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="border border-gray-200 text-gray-500 px-4 py-1.5 rounded-md text-sm hover:bg-gray-50 order-2 sm:order-1"
+                className="border border-[#E8DFD0] text-[#5C5249] hover:bg-[#FBF6EF] px-5 py-2.5 rounded-xl text-sm font-medium transition-all cursor-pointer order-2 sm:order-1"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSave}
-                className="bg-[#185FA5] text-white px-4 py-1.5 rounded-md text-sm hover:bg-[#0C447C] flex items-center justify-center gap-1 order-1 sm:order-2"
+                className="bg-[#2A6B63] hover:bg-[#235953] text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer flex items-center justify-center gap-1.5 order-1 sm:order-2"
               >
                 <i className="ti ti-device-floppy" aria-hidden="true"></i> Save doctor
               </button>
