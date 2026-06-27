@@ -6,6 +6,7 @@ import { connectDB } from "./config/db";
 import authRoutes from "./routes/authRoutes";
 import doctorRoutes from "./routes/doctorRoutes";
 import appointmentRoutes from "./routes/appointmentRoutes";
+import chatRoutes from "./routes/chatRoutes";
 
 const app = express();
 
@@ -17,6 +18,7 @@ connectDB();
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/doctor", doctorRoutes);
 app.use("/api/v1/appointments", appointmentRoutes);
+app.use("/api/v1/chat", chatRoutes);
 
 app.get("/", (req, res) => {
   res.json({
